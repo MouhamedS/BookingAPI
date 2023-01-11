@@ -32,6 +32,12 @@ public class Room {
 
     private List<Reservation> reservations = new ArrayList<>();
 
+    /**
+     * Create a reservation for this room
+     * @param checkIn  check in date
+     * @param checkOut check out date
+     * @return Reservation
+     */
     public Reservation createReservation(Date checkIn, Date checkOut){
         //Validate the date for the new reservation
         Utility.validateDates(checkIn, checkOut);
@@ -51,20 +57,29 @@ public class Room {
                 .dateCheckIn(checkIn)
                 .dateCheckOut(checkOut)
                 .reservationNumber(RandomStringUtils.randomAlphanumeric(5))
+                .roomId(id)
                 .build();
         reservations.add(reservation);
 
         return reservation;
     }
 
+    /**
+     * C
+     * @param reservationNumber
+     * @return
+     */
     public boolean cancelReservation(String reservationNumber){
-       Optional<Reservation> reservation = this.reservations.stream()
-                .filter(reservation1 -> reservation1.getReservationNumber().equals(reservationNumber))
-                .findFirst();
+       Optional<Reservation> optionalReservation = this.getRoomReservationByReservationNumber(reservationNumber);
 
-       return reservation.isPresent();
+       return optionalReservation.isPresent();
     }
 
+    /**
+     *  Modif
+     * @param reservation
+     * @return
+     */
     public boolean modifyReservation(Reservation reservation){
         //Validate the date for the new reservation
         Utility.validateDates(reservation.getDateCheckIn(), reservation.getDateCheckOut());
@@ -79,9 +94,7 @@ public class Room {
         if (this.reservationOverlaps(reservation.getDateCheckIn(), reservation.getDateCheckOut())) {
             throw new InvalidRequestException(INVALID_DATE_OVERLAP);
         };
-        Optional<Reservation> reservationOptional = this.reservations.stream()
-                .filter(reservation1 -> reservation1.equals(reservation))
-                .findFirst();
+        Optional<Reservation> reservationOptional = this.getRoomReservationByReservationNumber(reservation.getReservationNumber());
         if (reservationOptional.isPresent()) {
             this.reservations.remove(reservationOptional.get());
             this.reservations.add(reservation);
@@ -91,11 +104,23 @@ public class Room {
         return false;
     }
 
+    /**
+     * Check if reservation does overlap with another reservation
+     * @param checkIn
+     * @param checkOut
+     * @return
+     */
     public boolean reservationOverlaps (Date checkIn, Date checkOut) {
 
         return this.reservations.stream()
                 .anyMatch(reservation -> reservation.getDateCheckIn().compareTo(checkOut) == 0
                         || reservation.getDateCheckOut().compareTo(checkIn) == 0);
 
+    }
+
+    public Optional <Reservation> getRoomReservationByReservationNumber(String reservationNumber) {
+        return this.reservations.stream()
+                .filter(reservation -> reservation.getReservationNumber().equals(reservationNumber))
+                .findFirst();
     }
 }

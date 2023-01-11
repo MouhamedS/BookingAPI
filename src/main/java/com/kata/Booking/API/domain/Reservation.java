@@ -15,6 +15,7 @@ public class Reservation {
 
     private Long id;
 
+    private Long roomId;
     private Date dateCheckIn;
 
     private Date dateCheckOut;
