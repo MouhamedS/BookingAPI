@@ -65,8 +65,8 @@ public class BookingServiceImpl  implements BookingService {
             Optional<Reservation> existingReservation = room.getRoomReservationByReservationNumber(reservation.getReservationNumber());
             if (existingReservation.isPresent()) {
                 boolean result =  room.modifyReservation(reservation);
-                roomRespository.saveRoom(room);
-
+                log.info("Room saved into DB {}", roomRespository.saveRoom(room));
+                log.info("Reservation modification has been correctly perform : {}", result);
                 return result;
             } else {
                 log.error("Invalid Reservation: This reservation with number {] does not exist.", reservation.getReservationNumber());
@@ -92,9 +92,9 @@ public class BookingServiceImpl  implements BookingService {
             if (existingReservation.isPresent()) {
 
                 boolean result =  room.cancelReservation(reservationNumber);
-                roomRespository.saveRoom(room);
+                log.info("Room saved into DB {}", roomRespository.saveRoom(room));
                 reservationRepository.deleteOne(existingReservation.get());
-
+                log.info("Reservation cancellation has been correctly perform : {}", result);
                 return result;
             }else {
                 log.error("Invalid Reservation: This reservation with number {] does not exist.", reservationNumber);
