@@ -21,8 +21,8 @@ import static com.kata.Booking.API.domain.util.ErrorMessages.INVALID_DATE_OVERLA
 public class Room {
     private  Long id;
 
+    private Long hotelId;
     private  String name;
-
     private String type;
     private Date availableTo;
 
@@ -36,7 +36,7 @@ public class Room {
      * Create a reservation for this room
      * @param checkIn  check in date
      * @param checkOut check out date
-     * @return Reservation
+     * @return ReservationMapper
      */
     public Reservation createReservation(Date checkIn, Date checkOut){
         //Validate the date for the new reservation

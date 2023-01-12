@@ -44,7 +44,7 @@ public class BookingServiceImpl  implements BookingService {
             Reservation reservation = room.createReservation(checkIn, checkOut);
 
              log.info("Room saved into DB {}", roomRespository.saveRoom(room));
-             log.info("Reservation created {}", reservation);
+             log.info("ReservationMapper created {}", reservation);
 
              return reservation;
         }
@@ -55,9 +55,9 @@ public class BookingServiceImpl  implements BookingService {
 
     @Override
     @Transactional
-    public Boolean modifyReservation(Reservation reservation, Long roomId) {
-        log.info("Service modifyReservation call with parameters roomId {}", roomId);
-        Optional<Room> optionalRoom = roomRespository.getOneById(roomId);
+    public Boolean modifyReservation(Reservation reservation) {
+        log.info("Service modifyReservation call with parameters roomId {}", reservation.getRoomId());
+        Optional<Room> optionalRoom = roomRespository.getOneById(reservation.getRoomId());
 
         if (optionalRoom.isPresent()){
             Room room = optionalRoom.get();
@@ -66,16 +66,16 @@ public class BookingServiceImpl  implements BookingService {
             if (existingReservation.isPresent()) {
                 boolean result =  room.modifyReservation(reservation);
                 log.info("Room saved into DB {}", roomRespository.saveRoom(room));
-                log.info("Reservation modification has been correctly perform : {}", result);
+                log.info("ReservationMapper modification has been correctly perform : {}", result);
                 return result;
             } else {
-                log.error("Invalid Reservation: This reservation with number {] does not exist.", reservation.getReservationNumber());
+                log.error("Invalid ReservationMapper: This reservation with number {] does not exist.", reservation.getReservationNumber());
                 throw  new InvalidRequestException(String.format(INVALID_RESERVATION_NUMBER, reservation.getReservationNumber()));
             }
         }
 
-        log.error("Invalid Room: This room id {} does not exist." , roomId);
-        throw  new InvalidRequestException(String.format(INVALID_ROOM_ID, roomId));
+        log.error("Invalid Room: This room id {} does not exist." , reservation.getRoomId());
+        throw  new InvalidRequestException(String.format(INVALID_ROOM_ID, reservation.getRoomId()));
     }
 
     @Override
@@ -94,10 +94,10 @@ public class BookingServiceImpl  implements BookingService {
                 boolean result =  room.cancelReservation(reservationNumber);
                 log.info("Room saved into DB {}", roomRespository.saveRoom(room));
                 reservationRepository.deleteOne(existingReservation.get());
-                log.info("Reservation cancellation has been correctly perform : {}", result);
+                log.info("ReservationMapper cancellation has been correctly perform : {}", result);
                 return result;
             }else {
-                log.error("Invalid Reservation: This reservation with number {] does not exist.", reservationNumber);
+                log.error("Invalid ReservationMapper: This reservation with number {] does not exist.", reservationNumber);
                 throw  new InvalidRequestException(String.format(INVALID_RESERVATION_NUMBER, reservationNumber));
             }
         }

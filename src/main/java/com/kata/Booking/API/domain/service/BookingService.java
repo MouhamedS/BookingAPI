@@ -7,10 +7,33 @@ import java.util.List;
 
 public interface BookingService {
 
+    /**
+     *
+     * @return
+     */
     List<Reservation> getAllReservations();
+
+    /**
+     *
+     * @param checkIn
+     * @param checkOut
+     * @param roomId
+     * @return
+     */
     Reservation createReservation(Date checkIn, Date checkOut, Long roomId);
 
-    Boolean modifyReservation(Reservation reservation, Long roomId);
+    /**
+     *
+     * @param reservation
+     * @return
+     */
+    Boolean modifyReservation(Reservation reservation);
 
+    /**
+     *
+     * @param reservationNumber
+     * @param roomId
+     * @return
+     */
     Boolean cancelReservation (String reservationNumber, Long roomId);
 }
