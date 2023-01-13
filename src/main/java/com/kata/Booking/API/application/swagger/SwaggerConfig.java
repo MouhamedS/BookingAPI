@@ -21,7 +21,7 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public OpenAPI bankAccountOpenAPI() {
+    public OpenAPI reservationOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("Reservation API")
                         .description("This is the core API for Room availability and reservation booking in a specified database. Inventory searches, reservation searches, \" +\n" +

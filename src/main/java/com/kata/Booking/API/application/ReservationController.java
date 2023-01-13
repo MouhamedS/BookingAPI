@@ -1,4 +1,4 @@
-package com.kata.Booking.API.application.controllers;
+package com.kata.Booking.API.application;
 
 import com.kata.Booking.API.application.mapper.ReservationResourceMapper;
 import com.kata.Booking.API.application.resources.ReservationResource;
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name ="Reservation API", description = "API to do rservation operations")
+@Tag(name ="Reservation API", description = "API to do reservation operations")
 @Slf4j
-@RestController(value = "api/v1/reservations")
+@RestController(value = "/api/v1/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
 
