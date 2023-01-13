@@ -6,13 +6,5 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Hotel {
-    private Integer id;
 
-    private String name;
-
-    private List<Room> rooms;
-}
+public record  Hotel(Integer id, String name, List<Room> rooms) {}

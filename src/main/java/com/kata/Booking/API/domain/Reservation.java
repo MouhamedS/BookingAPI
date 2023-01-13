@@ -7,20 +7,5 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Reservation {
 
-    private Long id;
-
-    private Long roomId;
-    private Date dateCheckIn;
-
-    private Date dateCheckOut;
-
-    private String reservationNumber;
-
-
-}
+public record Reservation (Long roomId, Date dateCheckIn, Date dateCheckOut, String reservationNumber) {}

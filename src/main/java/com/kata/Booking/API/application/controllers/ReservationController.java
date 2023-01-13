@@ -60,7 +60,7 @@ public class ReservationController {
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ReservationResource createReservation(@io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "The reservation to be created") @RequestBody ReservationResource resource){
         return mapper.toResource(bookingService
-                .createReservation(resource.getDateCheckIn(), resource.getDateCheckOut(), resource.getRoomId()));
+                .createReservation(resource.dateCheckIn(), resource.dateCheckOut(), resource.roomId()));
     }
 
     @Operation(summary = "Modify a reservation")

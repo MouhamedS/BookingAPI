@@ -56,26 +56,26 @@ public class BookingServiceImpl  implements BookingService {
     @Override
     @Transactional
     public Boolean modifyReservation(Reservation reservation) {
-        log.info("Service modifyReservation call with parameters roomId {}", reservation.getRoomId());
-        Optional<Room> optionalRoom = roomRespository.getOneById(reservation.getRoomId());
+        log.info("Service modifyReservation call with parameters roomId {}", reservation.roomId());
+        Optional<Room> optionalRoom = roomRespository.getOneById(reservation.roomId());
 
         if (optionalRoom.isPresent()){
             Room room = optionalRoom.get();
 
-            Optional<Reservation> existingReservation = room.getRoomReservationByReservationNumber(reservation.getReservationNumber());
+            Optional<Reservation> existingReservation = room.getRoomReservationByReservationNumber(reservation.reservationNumber());
             if (existingReservation.isPresent()) {
                 boolean result =  room.modifyReservation(reservation);
                 log.info("Room saved into DB {}", roomRespository.saveRoom(room));
                 log.info("ReservationMapper modification has been correctly perform : {}", result);
                 return result;
             } else {
-                log.error("Invalid ReservationMapper: This reservation with number {] does not exist.", reservation.getReservationNumber());
-                throw  new InvalidRequestException(String.format(INVALID_RESERVATION_NUMBER, reservation.getReservationNumber()));
+                log.error("Invalid ReservationMapper: This reservation with number {] does not exist.", reservation.reservationNumber());
+                throw  new InvalidRequestException(String.format(INVALID_RESERVATION_NUMBER, reservation.reservationNumber()));
             }
         }
 
-        log.error("Invalid Room: This room id {} does not exist." , reservation.getRoomId());
-        throw  new InvalidRequestException(String.format(INVALID_ROOM_ID, reservation.getRoomId()));
+        log.error("Invalid Room: This room id {} does not exist." , reservation.roomId());
+        throw  new InvalidRequestException(String.format(INVALID_ROOM_ID, reservation.roomId()));
     }
 
     @Override
