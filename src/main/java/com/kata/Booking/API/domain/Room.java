@@ -56,6 +56,8 @@ public class Room {
         Reservation reservation = new Reservation(id, checkIn, checkOut, RandomStringUtils.randomAlphanumeric(5));
         reservations.add(reservation);
 
+        //The availability date must also change
+
         return reservation;
     }
 

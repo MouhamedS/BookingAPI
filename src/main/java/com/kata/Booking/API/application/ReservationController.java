@@ -21,7 +21,8 @@ import java.util.List;
 
 @Tag(name ="Reservation API", description = "API to do reservation operations")
 @Slf4j
-@RestController(value = "/api/v1/reservations")
+@RestController(value = "ReservationController")
+@RequestMapping(value = "/api/v1/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
 
@@ -29,7 +30,7 @@ public class ReservationController {
 
     private final ReservationResourceMapper mapper;
 
-    @Operation(summary = "Get all the rservations")
+    @Operation(summary = "Get all the reservations")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All reservations retrieved", content = {
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -43,6 +44,7 @@ public class ReservationController {
     })
     @GetMapping(produces = "application/json" )
     public List<ReservationResource> getAllReservations(){
+        log.info("Call endpoint GET /api/v1/reservations to retrieve all reservations");
         return mapper.toResources(bookingService.getAllReservations());
     }
 
@@ -58,7 +60,9 @@ public class ReservationController {
             @ApiResponse(responseCode = "500", description = "Internal error", content = @Content)
     })
     @PostMapping(produces = "application/json", consumes = "application/json")
-    public ReservationResource createReservation(@io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "The reservation to be created") @RequestBody ReservationResource resource){
+    public ReservationResource createReservation(@io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "The reservation to be created")
+                                                     @RequestBody ReservationResource resource){
+        log.info("Call endpoint POST /api/v1/reservations to create new reservation with request {}", resource);
         return mapper.toResource(bookingService
                 .createReservation(resource.dateCheckIn(), resource.dateCheckOut(), resource.roomId()));
     }
@@ -75,8 +79,10 @@ public class ReservationController {
             @ApiResponse(responseCode = "500", description = "Internal error", content = @Content)
     })
     @PutMapping(produces = "application/json", consumes = "application/json")
-    public Boolean modifyReservation(@io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,description = "The modified reservayion") @RequestBody ReservationResource resource){
-       return bookingService
+    public Boolean modifyReservation(@io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,description = "The modified reservayion")
+                                         @RequestBody ReservationResource resource){
+        log.info("Call endpoint PUT /api/v1/reservations to modify a reservation with request {}", resource);
+        return bookingService
                 .modifyReservation(mapper.fromResource(resource));
     }
 
@@ -94,6 +100,7 @@ public class ReservationController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteReservation(@Parameter(required = true, description = "The reservation number" , example = "AHAJ4")@PathVariable(name = "reservationNumber")String reservationNumber,
                                   @Parameter(required = true, description = "The room id" , example = "1")@PathVariable(name = "roomId")Long roomId){
+        log.info("Call endpoint PUT /api/v1/reservations to delete reservation with parameters roomId {} reservationNumber {}", roomId, reservationNumber);
         bookingService
                 .cancelReservation(reservationNumber, roomId);
     }
