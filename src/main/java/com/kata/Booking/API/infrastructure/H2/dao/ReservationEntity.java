@@ -26,7 +26,7 @@ public class ReservationEntity {
     @Column(name = "DATE_CHECK_IN")
     private Date dateCheckIn;
 
-    @Column(name = "DATE_CHECK_IN")
+    @Column(name = "DATE_CHECK_OUT")
     private Date dateCheckOut;
 
     @Column(name = "RESERVATION_NUMBER")
