@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,9 +25,9 @@ public class Room {
     private Long hotelId;
     private  String name;
     private String type;
-    private Date availableTo;
+    private LocalDate availableTo;
 
-    private Date availableFrom;
+    private LocalDate availableFrom;
 
     private BookingStatus status;
 
@@ -38,7 +39,7 @@ public class Room {
      * @param checkOut check out date
      * @return ReservationMapper
      */
-    public Reservation createReservation(Date checkIn, Date checkOut){
+    public Reservation createReservation(LocalDate checkIn, LocalDate checkOut){
         //Validate the date for the new reservation
         Utility.validateDates(checkIn, checkOut);
 
@@ -107,7 +108,7 @@ public class Room {
      * @param checkOut
      * @return
      */
-    public boolean reservationOverlaps (Date checkIn, Date checkOut) {
+    public boolean reservationOverlaps (LocalDate checkIn, LocalDate checkOut) {
 
         return this.reservations.stream()
                 .anyMatch(reservation -> reservation.dateCheckIn().compareTo(checkOut) == 0

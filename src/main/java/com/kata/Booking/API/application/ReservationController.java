@@ -59,12 +59,13 @@ public class ReservationController {
             }),
             @ApiResponse(responseCode = "500", description = "Internal error", content = @Content)
     })
-    @PostMapping(produces = "application/json", consumes = "application/json")
-    public ReservationResource createReservation(@io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "The reservation to be created")
+    @PostMapping(value = "/room/{roomId}" ,produces = "application/json", consumes = "application/json")
+    public ReservationResource createReservation(@Parameter(description = "Room identification number",required = true, example = "1145")@PathVariable ("roomId") Long roomId,
+                                                     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "The reservation to be created")
                                                      @RequestBody ReservationResource resource){
         log.info("Call endpoint POST /api/v1/reservations to create new reservation with request {}", resource);
         return mapper.toResource(bookingService
-                .createReservation(resource.dateCheckIn(), resource.dateCheckOut(), resource.roomId()));
+                .createReservation(resource.dateCheckIn(), resource.dateCheckOut(), roomId));
     }
 
     @Operation(summary = "Modify a reservation")
@@ -78,12 +79,13 @@ public class ReservationController {
             }),
             @ApiResponse(responseCode = "500", description = "Internal error", content = @Content)
     })
-    @PutMapping(produces = "application/json", consumes = "application/json")
-    public Boolean modifyReservation(@io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,description = "The modified reservayion")
+    @PutMapping(value = "/room/{roomId}", produces = "application/json", consumes = "application/json")
+    public Boolean modifyReservation(@Parameter(description = "Room identification number",required = true, example = "1145")@PathVariable ("roomId") Long roomId,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,description = "The modified reservayion")
                                          @RequestBody ReservationResource resource){
         log.info("Call endpoint PUT /api/v1/reservations to modify a reservation with request {}", resource);
         return bookingService
-                .modifyReservation(mapper.fromResource(resource));
+                .modifyReservation(mapper.fromResource(resource), roomId);
     }
 
     @Operation(summary = "Cancel a reservation")
@@ -96,7 +98,7 @@ public class ReservationController {
             }),
             @ApiResponse(responseCode = "500", description = "Internal error", content = @Content)
     })
-    @DeleteMapping(value = "/{roomId}/{reservationNumber}",produces = "application/json")
+    @DeleteMapping(value = "/room/{roomId}/{reservationNumber}",produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void deleteReservation(@Parameter(required = true, description = "The reservation number" , example = "AHAJ4")@PathVariable(name = "reservationNumber")String reservationNumber,
                                   @Parameter(required = true, description = "The room id" , example = "1")@PathVariable(name = "roomId")Long roomId){

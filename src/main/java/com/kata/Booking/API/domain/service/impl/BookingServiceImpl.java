@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class BookingServiceImpl  implements BookingService {
 
     @Override
     @Transactional
-    public Reservation createReservation(Date checkIn, Date checkOut, Long roomId) {
+    public synchronized Reservation createReservation(LocalDate checkIn, LocalDate checkOut, Long roomId) {
         log.info("Service createReservation call with parameters checkIn {} checkOut {} roomId {}", checkIn, roomId);
         Optional<Room> optionalRoom = roomRespository.getOneById(roomId);
 
@@ -55,9 +56,9 @@ public class BookingServiceImpl  implements BookingService {
 
     @Override
     @Transactional
-    public Boolean modifyReservation(Reservation reservation) {
+    public Boolean modifyReservation(Reservation reservation, Long roomId) {
         log.info("Service modifyReservation call with parameters roomId {}", reservation.roomId());
-        Optional<Room> optionalRoom = roomRespository.getOneById(reservation.roomId());
+        Optional<Room> optionalRoom = roomRespository.getOneById(roomId);
 
         if (optionalRoom.isPresent()){
             Room room = optionalRoom.get();

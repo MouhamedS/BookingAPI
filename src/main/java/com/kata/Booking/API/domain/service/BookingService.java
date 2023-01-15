@@ -2,6 +2,7 @@ package com.kata.Booking.API.domain.service;
 
 import com.kata.Booking.API.domain.Reservation;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -20,14 +21,16 @@ public interface BookingService {
      * @param roomId
      * @return
      */
-    Reservation createReservation(Date checkIn, Date checkOut, Long roomId);
+    Reservation createReservation(LocalDate checkIn, LocalDate checkOut, Long roomId);
+
 
     /**
      *
      * @param reservation
+     * @param roomId
      * @return
      */
-    Boolean modifyReservation(Reservation reservation);
+    Boolean modifyReservation(Reservation reservation, Long roomId);
 
     /**
      *

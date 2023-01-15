@@ -1,6 +1,6 @@
 package com.kata.Booking.API.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 
-public record Reservation (Long roomId, Date dateCheckIn, Date dateCheckOut, String reservationNumber) {}
+public record Reservation (Long roomId, LocalDate dateCheckIn, LocalDate dateCheckOut, String reservationNumber) {}
