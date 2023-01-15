@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.kata.Booking.API.domain.util.ErrorMessages.INVALID_DATE_OVERLAP;
+import static com.kata.Booking.API.domain.util.ErrorMessages.INVALID_DATE_ROOM_UNAVAILABLE;
 
 @Data
 @NoArgsConstructor
@@ -25,9 +25,9 @@ public class Room {
     private Long hotelId;
     private  String name;
     private String type;
-    private LocalDate availableTo;
 
     private LocalDate availableFrom;
+    private LocalDate availableTo;
 
     private BookingStatus status;
 
@@ -35,6 +35,7 @@ public class Room {
 
     /**
      * Create a reservation for this room
+     *
      * @param checkIn  check in date
      * @param checkOut check out date
      * @return ReservationMapper
@@ -53,17 +54,24 @@ public class Room {
         if (this.reservationOverlaps(checkIn, checkOut)) {
             throw new InvalidRequestException(INVALID_DATE_OVERLAP);
         };
+        // Check the date are within the availability window of the room
+        if(this.isAvailable(checkIn, checkOut)){
+            throw new InvalidRequestException(INVALID_DATE_ROOM_UNAVAILABLE);
+        }
 
+        // Create the reservation if it clears all the checkpoints
         Reservation reservation = new Reservation(id, checkIn, checkOut, RandomStringUtils.randomAlphanumeric(5));
         reservations.add(reservation);
 
-        //The availability date must also change
+        //Change room availability date
+        this.availableFrom = this.availableFrom.plusDays(ChronoUnit.DAYS.between(checkIn, checkOut));
 
         return reservation;
     }
 
     /**
-     * C
+     * Cancel an existing reservation
+     *
      * @param reservationNumber
      * @return
      */
@@ -74,7 +82,8 @@ public class Room {
     }
 
     /**
-     *  Modif
+     *  Modify an existing reservation
+     *
      * @param reservation
      * @return
      */
@@ -91,11 +100,18 @@ public class Room {
         // Check if the new reservation does not overlap with existing one
         if (this.reservationOverlaps(reservation.dateCheckIn(), reservation.dateCheckOut())) {
             throw new InvalidRequestException(INVALID_DATE_OVERLAP);
-        };
+        }
+
+        // Check the date are within the availability window of the room
+        if(this.isAvailable(reservation.dateCheckIn(), reservation.dateCheckOut())){
+            throw new InvalidRequestException(INVALID_DATE_ROOM_UNAVAILABLE);
+        }
         Optional<Reservation> reservationOptional = this.getRoomReservationByReservationNumber(reservation.reservationNumber());
         if (reservationOptional.isPresent()) {
             this.reservations.remove(reservationOptional.get());
             this.reservations.add(reservation);
+            //Change room availability date
+            this.availableFrom = this.availableFrom.plusDays(ChronoUnit.DAYS.between(reservation.dateCheckIn(), reservation.dateCheckOut()));
             return true;
         }
 
@@ -104,6 +120,7 @@ public class Room {
 
     /**
      * Check if reservation does overlap with another reservation
+     *
      * @param checkIn
      * @param checkOut
      * @return
@@ -116,9 +133,27 @@ public class Room {
 
     }
 
+    /**
+     * Get a reservation by the reservation number
+     *
+     * @param reservationNumber reservation number
+     * @return the reservation
+     */
     public Optional <Reservation> getRoomReservationByReservationNumber(String reservationNumber) {
         return this.reservations.stream()
                 .filter(reservation -> reservation.reservationNumber().equals(reservationNumber))
                 .findFirst();
+    }
+
+    /**
+     * Check if the reservation dates are with the availability windows of the room
+     *
+     * @param checkIn Date Check in
+     * @param checkOut Date checkOut
+     * @return
+     */
+    public boolean isAvailable(LocalDate checkIn, LocalDate checkOut){
+        return (this.availableFrom.isEqual(checkIn) || this.availableFrom.isBefore(checkIn)) &&
+                (this.availableTo.isEqual(checkOut) || this.availableTo.isBefore(checkOut));
     }
 }

@@ -20,8 +20,8 @@ public class ReservationAdapter implements ReservationRepository {
     private final ReservationMapper mapper;
 
     @Override
-    public List<Reservation> getAll() {
-        return  mapper.fromEntities(jpaRepository.findAll());
+    public List<Reservation> getAllReservationsByRoomId(Long roomId) {
+        return  mapper.fromEntities(jpaRepository.findByRoomEntity_Id(roomId));
     }
 
     @Override

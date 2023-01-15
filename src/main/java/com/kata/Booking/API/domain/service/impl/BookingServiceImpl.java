@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,14 +28,15 @@ public class BookingServiceImpl  implements BookingService {
     private final RoomRespository roomRespository;
 
     @Override
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.getAll();
+    public List<Reservation> getAllReservationsByRoomId(Long roomId) {
+        log.info("Service getAllReservationsByRoomId call with parameters  roomId {}", roomId);
+        return reservationRepository.getAllReservationsByRoomId(roomId);
     }
 
     @Override
     @Transactional
     public synchronized Reservation createReservation(LocalDate checkIn, LocalDate checkOut, Long roomId) {
-        log.info("Service createReservation call with parameters checkIn {} checkOut {} roomId {}", checkIn, roomId);
+        log.info("Service createReservation call with parameters checkIn {} checkOut {} roomId {}", checkIn, checkOut, roomId);
         Optional<Room> optionalRoom = roomRespository.getOneById(roomId);
 
         if (optionalRoom.isPresent()) {
@@ -105,5 +105,16 @@ public class BookingServiceImpl  implements BookingService {
 
         log.error("Invalid Room: This room id {} does not exist." , roomId);
         throw  new InvalidRequestException(String.format(INVALID_ROOM_ID, roomId));
+    }
+
+    /**
+     * Service to find room  by id
+     *
+     * @param roomId Id of the romm
+     * @return the Room object
+     */
+    @Override
+    public Optional<Room> getRoomById(Long roomId) {
+        return  roomRespository.getOneById(roomId);
     }
 }

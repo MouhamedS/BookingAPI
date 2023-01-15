@@ -3,6 +3,7 @@ package com.kata.Booking.API.infrastructure.H2.mapper;
 import com.kata.Booking.API.domain.Reservation;
 import com.kata.Booking.API.infrastructure.H2.dao.ReservationEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
@@ -16,6 +17,7 @@ public interface ReservationMapper {
 
     ReservationEntity toEntity(Reservation reservation);
 
+    @Mapping(source = "room.id", target = "roomId")
     Reservation fromEntity(ReservationEntity entity);
 
     List<Reservation> fromEntities(List<ReservationEntity> entities);

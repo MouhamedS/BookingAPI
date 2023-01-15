@@ -20,7 +20,7 @@ public class GlobalException extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler( {InvalidRequestException.class})
-    public ResponseEntity<String> handleThresholdViolation(RuntimeException e) {
+    public ResponseEntity<String> handleThresholdViolation(InvalidRequestException e) {
 
         log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

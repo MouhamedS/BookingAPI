@@ -1,4 +1,4 @@
-package com.kata.Booking.API.application;
+package com.kata.Booking.API.application.controllers;
 
 import com.kata.Booking.API.application.mapper.ReservationResourceMapper;
 import com.kata.Booking.API.application.resources.ReservationResource;
@@ -28,7 +28,7 @@ public class ReservationController {
 
     private final BookingService bookingService;
 
-    private final ReservationResourceMapper mapper;
+    private final ReservationResourceMapper reservationResourceMapper;
 
     @Operation(summary = "Get all the reservations")
     @ApiResponses(value = {
@@ -42,10 +42,10 @@ public class ReservationController {
             @ApiResponse(responseCode = "500", description = "Internal error", content = @Content)
 
     })
-    @GetMapping(produces = "application/json" )
-    public List<ReservationResource> getAllReservations(){
+    @GetMapping( value = "/room/{roomId}",produces = "application/json" )
+    public List<ReservationResource> getAllReservations(@PathVariable("roomId")Long roomId){
         log.info("Call endpoint GET /api/v1/reservations to retrieve all reservations");
-        return mapper.toResources(bookingService.getAllReservations());
+        return reservationResourceMapper.toResources(bookingService.getAllReservationsByRoomId(roomId));
     }
 
     @Operation(summary = "Create a new reservation")
@@ -64,7 +64,7 @@ public class ReservationController {
                                                      @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "The reservation to be created")
                                                      @RequestBody ReservationResource resource){
         log.info("Call endpoint POST /api/v1/reservations to create new reservation with request {}", resource);
-        return mapper.toResource(bookingService
+        return reservationResourceMapper.toResource(bookingService
                 .createReservation(resource.dateCheckIn(), resource.dateCheckOut(), roomId));
     }
 
@@ -85,7 +85,7 @@ public class ReservationController {
                                          @RequestBody ReservationResource resource){
         log.info("Call endpoint PUT /api/v1/reservations to modify a reservation with request {}", resource);
         return bookingService
-                .modifyReservation(mapper.fromResource(resource), roomId);
+                .modifyReservation(reservationResourceMapper.fromResource(resource), roomId);
     }
 
     @Operation(summary = "Cancel a reservation")

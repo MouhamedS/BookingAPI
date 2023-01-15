@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ReservationRepository {
 
-    List<Reservation> getAll();
+    List<Reservation> getAllReservationsByRoomId(Long roomId);
     Reservation saveReservation(Reservation reservation);
 
     Optional<Reservation> getOneById(Long id);

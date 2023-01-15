@@ -14,9 +14,8 @@ public class ErrorMessages {
     public static final String INVALID_DATE_OVERLAP = "Invalid Date: The entered date overlaps with an already registered reservation.";
     public static final String INVALID_ROOM_ID = "Invalid Room: This room id %s does not exist.";
 
+    public static final String INVALID_DATE_ROOM_UNAVAILABLE = "Invalid Date: The entered date are not within the availability window of the room.";
+
     public static final String INVALID_RESERVATION_NUMBER = "Invalid ReservationMapper: This reservation with number %s does not exist.";
     public static final String INVALID_DATE_NULL_VALUES = "Invalid Date: If a date is entered, both the available to and the available from must be provided.";
-    public static final String EMPTY_INVENTORY_DATES = "Invalid Inventory: A reservation can not be made as the user specified inventory does not have available dates.";
-    public static final String INVALID_DATE_CHANGE_NULL = "Invalid Date Change: Inventory contains a reservation, therefore null inventory dates cannot be entered.";
-
 }

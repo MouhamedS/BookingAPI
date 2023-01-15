@@ -1,5 +1,5 @@
 # Reservation API
-Kata BanKAccount with Hexagonale Architecture
+Kata Booking API with Hexagonale Architecture
 Project build with JAVA 17
 
 ## Build
