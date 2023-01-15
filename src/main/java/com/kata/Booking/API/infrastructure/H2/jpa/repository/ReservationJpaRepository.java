@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface ReservationJpaRepository extends JpaRepository<ReservationEntity, Long> {
 
-    List<ReservationEntity> findByRoomEntity_Id(Long roomId);
+    List<ReservationEntity> findByRoom_Id(Long roomId);
     Optional <ReservationEntity> findByReservationNumber(String reservationNumber);
 }

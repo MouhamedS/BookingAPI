@@ -1,12 +1,11 @@
 package com.kata.Booking.API.infrastructure.H2.dao;
 
-import com.kata.Booking.API.domain.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -27,10 +26,10 @@ public class RoomEntity {
     @Column(name = "TYPE")
     private String type;
 
-    @Column(name = "AVALAIBLE_FROM")
-    private Date availableFrom;
-    @Column(name = "AVALAIBLE_TO")
-    private Date availableTo;
+    @Column(name = "AVAILABLE_FROM")
+    private LocalDate availableFrom;
+    @Column(name = "AVAILABLE_TO")
+    private LocalDate availableTo;
 
     @ManyToOne
     @JoinColumn(name = "HOTEL_ID")

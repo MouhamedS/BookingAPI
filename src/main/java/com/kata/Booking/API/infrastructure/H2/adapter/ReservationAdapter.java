@@ -5,7 +5,6 @@ import com.kata.Booking.API.domain.repository.ReservationRepository;
 import com.kata.Booking.API.infrastructure.H2.jpa.repository.ReservationJpaRepository;
 import com.kata.Booking.API.infrastructure.H2.mapper.ReservationMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class ReservationAdapter implements ReservationRepository {
 
     @Override
     public List<Reservation> getAllReservationsByRoomId(Long roomId) {
-        return  mapper.fromEntities(jpaRepository.findByRoomEntity_Id(roomId));
+        return mapper.fromEntities(jpaRepository.findByRoom_Id(roomId));
     }
 
     @Override
@@ -41,6 +40,6 @@ public class ReservationAdapter implements ReservationRepository {
 
     @Override
     public void deleteOne(Reservation reservation) {
-         jpaRepository.delete(mapper.toEntity(reservation));
+        jpaRepository.delete(mapper.toEntity(reservation));
     }
 }

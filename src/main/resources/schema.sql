@@ -1,0 +1,32 @@
+
+CREATE TABLE HOTEL(
+    HOTEL_ID BIGINT PRIMARY KEY AUTO_INCREMENT,
+    NAME VARCHAR(255)
+);
+
+CREATE TABLE ROOM (
+    ID BIGINT PRIMARY KEY AUTO_INCREMENT,
+    NAME VARCHAR(255),
+    TYPE VARCHAR(255),
+    AVAILABLE_FROM DATE,
+    AVAILABLE_TO DATE,
+    HOTEL_ID BIGINT
+);
+
+CREATE TABLE RESERVATION(
+ RESERVATION_ID BIGINT PRIMARY KEY AUTO_INCREMENT,
+ ROOM_ID BIGINT,
+ DATE_CHECK_IN DATE,
+ DATE_CHECK_OUT DATE,
+ RESERVATION_NUMBER VARCHAR(255)
+);
+
+alter table ROOM
+ add constraint foreign_key_room
+    foreign key (HOTEL_ID)
+    references hotel;
+
+alter table RESERVATION
+ add constraint foreign_key_reservation
+    foreign key (ROOM_ID)
+    references room;

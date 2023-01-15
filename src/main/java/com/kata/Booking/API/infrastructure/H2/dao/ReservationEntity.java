@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "RESERVATION")
@@ -24,10 +24,10 @@ public class ReservationEntity {
     private RoomEntity room;
 
     @Column(name = "DATE_CHECK_IN")
-    private Date dateCheckIn;
+    private LocalDate dateCheckIn;
 
     @Column(name = "DATE_CHECK_OUT")
-    private Date dateCheckOut;
+    private LocalDate dateCheckOut;
 
     @Column(name = "RESERVATION_NUMBER")
     private String reservationNumber;
