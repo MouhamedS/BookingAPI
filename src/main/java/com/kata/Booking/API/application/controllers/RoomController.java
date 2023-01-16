@@ -28,11 +28,11 @@ public class RoomController {
     @GetMapping(value = "/{roomId}/availability", produces = "application/json" )
     public RoomAvailabilityResource getRoomAvailability(@PathVariable("roomId")Long roomId){
         log.info("Call endpoint GET /api/v1/reservations to retrieve all reservations");
-        return roomAvailabilityMapper
-                .toResource(bookingService
-                        .getRoomById(roomId)
-                        .orElseThrow(() -> new DefaultControllerException(new DefaultErrorMessage(HttpStatus.BAD_REQUEST.value(),
-                                HttpStatus.BAD_REQUEST,
-                                String.format("Room with %s  does not exist in Database", roomId)))));
+        return bookingService
+                .getRoomById(roomId)
+                .map(room -> roomAvailabilityMapper.toResource(room))
+                .orElseThrow(() -> new DefaultControllerException(new DefaultErrorMessage(HttpStatus.BAD_REQUEST.value(),
+                        HttpStatus.BAD_REQUEST,
+                        String.format("Room with %s  does not exist in Database", roomId))));
     }
 }

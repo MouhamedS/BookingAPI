@@ -22,7 +22,7 @@ public class Utility {
         } else {
             //If the dates contain a string value then proceed.
 
-            boolean orderIsValid = from.isBefore(to);
+            boolean orderIsValid = from.isBefore(to) || from.isEqual(to);
             if (!orderIsValid) {
                 throw new InvalidRequestException(INVALID_DATE_ORDER);
             }

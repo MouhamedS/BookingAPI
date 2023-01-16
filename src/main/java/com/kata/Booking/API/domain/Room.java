@@ -63,8 +63,8 @@ public class Room {
         Reservation reservation = new Reservation(id, checkIn, checkOut, RandomStringUtils.randomAlphanumeric(5));
         reservations.add(reservation);
 
-        //Change room availability date
-        this.availableFrom = this.availableFrom.plusDays(ChronoUnit.DAYS.between(checkIn, checkOut));
+        //Change room availability date // only works if the first booking begin at the first day available else this rule is false
+        this.setAvailableFrom(reservation.dateCheckOut().plusDays(1));
 
         return reservation;
     }
@@ -110,8 +110,8 @@ public class Room {
         if (reservationOptional.isPresent()) {
             this.reservations.remove(reservationOptional.get());
             this.reservations.add(reservation);
-            //Change room availability date
-            this.availableFrom = this.availableFrom.plusDays(ChronoUnit.DAYS.between(reservation.dateCheckIn(), reservation.dateCheckOut()));
+            //Change room availability date // only works if the first booking begin at the first day available else this rule is false
+            this.setAvailableFrom(reservation.dateCheckOut().plusDays(1));
             return true;
         }
 
@@ -128,8 +128,9 @@ public class Room {
     public boolean reservationOverlaps (LocalDate checkIn, LocalDate checkOut) {
 
         return this.reservations.stream()
-                .anyMatch(reservation -> reservation.dateCheckIn().compareTo(checkOut) == 0
-                        || reservation.dateCheckOut().compareTo(checkIn) == 0);
+                .anyMatch(reservation -> reservation.dateCheckIn().isEqual(checkIn)
+                        || reservation.dateCheckOut().isEqual(checkOut) || (reservation.dateCheckIn().isBefore(checkIn)
+                                                                            && reservation.dateCheckOut().isAfter(checkIn)));
 
     }
 
@@ -147,9 +148,9 @@ public class Room {
 
     /**
      * Check if the reservation dates are with the availability windows of the room
-     *
+     * The assumption was that the bookings will follow each other and the first booking will be at the first day available
      * @param checkIn Date Check in
-     * @param checkOut Date checkOut
+     * @param checkOut Date Check Out
      * @return
      */
     public boolean isAvailable(LocalDate checkIn, LocalDate checkOut){
