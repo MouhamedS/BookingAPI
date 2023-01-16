@@ -66,6 +66,8 @@ public class BookingServiceImpl  implements BookingService {
             Optional<Reservation> existingReservation = room.getRoomReservationByReservationNumber(reservation.reservationNumber());
             if (existingReservation.isPresent()) {
                 boolean result =  room.modifyReservation(reservation);
+                log.info("Remove the old reservation");
+                reservationRepository.deleteOne(existingReservation.get());
                 log.info("Room saved into DB {}", roomRespository.saveRoom(room));
                 log.info("ReservationMapper modification has been correctly perform : {}", result);
                 return result;
@@ -93,9 +95,11 @@ public class BookingServiceImpl  implements BookingService {
             if (existingReservation.isPresent()) {
 
                 boolean result =  room.cancelReservation(existingReservation.get());
+
                 log.info("Room saved into DB {}", roomRespository.saveRoom(room));
                 reservationRepository.deleteOne(existingReservation.get());
                 log.info("ReservationMapper cancellation has been correctly perform : {}", result);
+
                 return result;
             }else {
                 log.error("Invalid ReservationMapper: This reservation with number {] does not exist.", reservationNumber);

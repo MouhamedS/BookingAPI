@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Arrays;
 
-@ExtendWith(MockitoExtension.class)
+
 public class RoomCreateReservationTest {
 
     private Hotel hotel;
@@ -30,40 +30,40 @@ public class RoomCreateReservationTest {
     }
 
     @Test
-    void testCreateReservationOneDay (){
+    void testCreateReservationOneDayTest (){
         room.createReservation(LocalDate.of(2023,01,01), LocalDate.of(2023,01   ,01));
         Assertions.assertThat(room.getReservations().size()).isEqualTo(1);
     }
 
     @Test
-    void testCreateReservationTwoDay (){
+    void testCreateReservationTwoDayTest (){
         room.createReservation(LocalDate.of(2023,01,01), LocalDate.of(2023,01   ,02));
         Assertions.assertThat(room.getReservations().size()).isEqualTo(1);
     }
 
     @Test
-    void testCreateReservation3Day (){
+    void testCreateReservation3DayTest (){
         room.createReservation(LocalDate.of(2023,01,01), LocalDate.of(2023,01   ,03));
         Assertions.assertThat(room.getReservations().size()).isEqualTo(1);
     }
 
     @Test
-    void testCreateReservation4Day (){
+    void testCreateReservation4DayTest (){
 
         Assertions.assertThatThrownBy(() -> room.createReservation(LocalDate.of(2023,01,01), LocalDate.of(2023,01   ,04)))
                 .isInstanceOf(InvalidRequestException.class)
-                .hasMessage("Invalid duration: ReservationMapper is longer than 3 days");
+                .hasMessage("Invalid duration: Reservation is longer than 3 days");
     }
 
     @Test
-    void testCreateReservationMoreThan30DaysPrior() {
+    void testCreateReservationMoreThan30DaysPriorTest() {
         Assertions.assertThatThrownBy(() -> room.createReservation(LocalDate.of(2023,10,01), LocalDate.of(2023,10   ,03)))
                 .isInstanceOf(InvalidRequestException.class)
-                .hasMessage("Invalid time: ReservationMapper cannot be done more than 30 days in advanced");
+                .hasMessage("Invalid time: Reservation cannot be done more than 30 days in advanced");
     }
 
     @Test
-    void testCreateOverlappingReservation() {
+    void testCreateOverlappingReservationTest() {
         room.createReservation(LocalDate.of(2023,01,01), LocalDate.of(2023,01   ,03));
         Assertions.assertThatThrownBy(() -> room.createReservation(LocalDate.of(2023,01,02), LocalDate.of(2023,01   ,04)))
                 .isInstanceOf(InvalidRequestException.class)
@@ -71,7 +71,7 @@ public class RoomCreateReservationTest {
     }
 
     @Test
-    void testCreateReservationWithAvailableDate() {
+    void testCreateReservationWithUnAvailableDateTest() {
         room.createReservation(LocalDate.of(2023,01,06), LocalDate.of(2023,01   ,07));
         Assertions.assertThatThrownBy(() -> room.createReservation(LocalDate.of(2023,01,02), LocalDate.of(2023,01   ,04)))
                 .isInstanceOf(InvalidRequestException.class)
