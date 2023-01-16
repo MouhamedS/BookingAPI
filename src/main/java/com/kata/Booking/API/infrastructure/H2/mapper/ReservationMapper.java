@@ -15,6 +15,7 @@ import java.util.Optional;
         unmappedSourcePolicy = ReportingPolicy.WARN)
 public interface ReservationMapper {
 
+    @Mapping(source = "roomId", target = "room.id")
     ReservationEntity toEntity(Reservation reservation);
 
     @Mapping(source = "room.id", target = "roomId")

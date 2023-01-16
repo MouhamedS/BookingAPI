@@ -14,9 +14,16 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.WARN)
 public interface RoomMapper {
 
+    @Mapping(source = "hotelId", target = "hotel.id")
     RoomEntity toEntity(Room room);
 
+    @Mapping(source = "hotel.id", target = "hotelId")
     Room fromEntity(RoomEntity entity);
+
+
+    @Mapping(source = "roomId", target = "room.id")
+    ReservationEntity toReservationEntity(Reservation reservation);
+
     @Mapping(source = "room.id", target = "roomId")
-    Reservation fromEntity(ReservationEntity entity);
+    Reservation fromReservationEntity(ReservationEntity entity);
 }

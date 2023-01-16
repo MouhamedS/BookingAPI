@@ -1,6 +1,7 @@
 package com.kata.Booking.API.application.controllers;
 
 import com.kata.Booking.API.application.mapper.ReservationResourceMapper;
+import com.kata.Booking.API.application.resources.ReservationCreateResource;
 import com.kata.Booking.API.application.resources.ReservationResource;
 import com.kata.Booking.API.domain.service.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,7 +63,7 @@ public class ReservationController {
     @PostMapping(value = "/room/{roomId}" ,produces = "application/json", consumes = "application/json")
     public ReservationResource createReservation(@Parameter(description = "Room identification number",required = true, example = "1145")@PathVariable ("roomId") Long roomId,
                                                      @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "The reservation to be created")
-                                                     @RequestBody ReservationResource resource){
+                                                     @RequestBody ReservationCreateResource resource){
         log.info("Call endpoint POST /api/v1/reservations to create new reservation with request {}", resource);
         return reservationResourceMapper.toResource(bookingService
                 .createReservation(resource.dateCheckIn(), resource.dateCheckOut(), roomId));
