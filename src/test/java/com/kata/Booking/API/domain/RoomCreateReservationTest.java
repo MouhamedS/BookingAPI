@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 @ExtendWith(MockitoExtension.class)
-public class RoomTest {
+public class RoomCreateReservationTest {
 
     private Hotel hotel;
 
