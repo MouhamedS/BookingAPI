@@ -54,7 +54,7 @@ public class Room {
             throw new InvalidRequestException(INVALID_DATE_OVERLAP);
         };
         // Check the date are within the availability window of the room
-        if(this.isAvailable(checkIn, checkOut)){
+        if(!this.isAvailable(checkIn, checkOut)){
             throw new InvalidRequestException(INVALID_DATE_ROOM_UNAVAILABLE);
         }
 

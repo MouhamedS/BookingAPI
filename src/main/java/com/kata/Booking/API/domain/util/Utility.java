@@ -31,11 +31,11 @@ public class Utility {
 
     /**
      * Check if the resevation duration does not exceed 3 days
-     * @param from the check in date
-     * @param to the check out date
+     * @param from the check in date inclusive
+     * @param to the check out date inclusive
      */
     public static void validateReservationDuration(LocalDate from, LocalDate to) {
-        if (DAYS.between(from, to) > 3) {
+        if (DAYS.between(from, to) + 1 > 3) {
             throw  new InvalidRequestException(INVALID_RESERVATION_DURATION);
         }
     }
