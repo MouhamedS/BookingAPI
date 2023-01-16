@@ -24,21 +24,6 @@ public class ReservationAdapter implements ReservationRepository {
     }
 
     @Override
-    public Reservation saveReservation(Reservation reservation) {
-        return mapper.fromEntity(jpaRepository.save(mapper.toEntity(reservation)));
-    }
-
-    @Override
-    public Optional<Reservation> getOneById(Long id) {
-        return Optional.ofNullable(mapper.fromEntity(jpaRepository.findById(id).orElse(null)));
-    }
-
-    @Override
-    public Optional<Reservation> getOnByReservationNumber(String reservationNumber) {
-        return Optional.ofNullable(mapper.fromEntity(jpaRepository.findByReservationNumber(reservationNumber).orElse(null)));
-    }
-
-    @Override
     public void deleteOne(Reservation reservation) {
         jpaRepository.delete(mapper.toEntity(reservation));
     }

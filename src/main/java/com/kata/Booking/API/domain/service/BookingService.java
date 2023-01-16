@@ -18,7 +18,7 @@ public interface BookingService {
 
     /**
      * Service to create a new reservation
-     *
+     * Method thread-safe to avoid that two user to create a reservation at the same time
      * @param checkIn  Date check in
      * @param checkOut Date check out
      * @param roomId  Id of the room
@@ -28,18 +28,19 @@ public interface BookingService {
 
 
     /**
+     *Modify the reservation
      *
-     * @param reservation
-     * @param roomId
-     * @return
+     * @param reservation The reservation to modify
+     * @param roomId room identification Number
+     * @return modify reservation
      */
     Boolean modifyReservation(Reservation reservation, Long roomId);
 
     /**
      * Service to cancel an existing reservation
      *
-     * @param reservationNumber
-     * @param roomId
+     * @param reservationNumber  Reservation number
+     * @param roomId room identification Number
      * @return
      */
     Boolean cancelReservation (String reservationNumber, Long roomId);
@@ -48,7 +49,7 @@ public interface BookingService {
     /**
      * Service to find room  by id
      *
-     * @param roomId Id of the romm
+     * @param roomId room identification Number
      * @return the Room object
      */
     Optional<Room> getRoomById(Long roomId);

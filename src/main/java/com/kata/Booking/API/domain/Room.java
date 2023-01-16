@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -70,22 +69,25 @@ public class Room {
     }
 
     /**
-     * Cancel an existing reservation
-     *
-     * @param reservationNumber
-     * @return
+     * Cancel an existing reservation by removing it from the room existing reservation
+     * @param reservation Rservation to remove
+     * @return True if the reservation has been removed else false
      */
-    public boolean cancelReservation(String reservationNumber){
-       Optional<Reservation> optionalReservation = this.getRoomReservationByReservationNumber(reservationNumber);
-
-       return optionalReservation.isPresent();
+    public boolean cancelReservation(Reservation reservation){
+        return this.reservations.remove(reservation);
     }
 
     /**
      *  Modify an existing reservation
+     *  1. Validate the date for the new reservation
+     *  2. Check the stay does not last more than 3 days
+     *  3. Check if the reservation is not done 30 days in advance
+     *  4. Check if the new reservation does not overlap with existing one
+     *  5. Check the date are within the availability window of the room
+     *  6. If check are cleared create the reservation and change the room availability date
      *
      * @param reservation
-     * @return
+     * @return True if the reservation has been modified alse false
      */
     public boolean modifyReservation(Reservation reservation){
         //Validate the date for the new reservation
@@ -120,9 +122,10 @@ public class Room {
 
     /**
      * Check if reservation does overlap with another reservation
-     *
-     * @param checkIn
-     * @param checkOut
+     *  Check if the given date are equals to an existing reservation dates
+     *  or the check in date is between an existing reservation date
+     * @param checkIn date check in
+     * @param checkOut date check out
      * @return
      */
     public boolean reservationOverlaps (LocalDate checkIn, LocalDate checkOut) {
@@ -148,13 +151,14 @@ public class Room {
 
     /**
      * Check if the reservation dates are with the availability windows of the room
-     * The assumption was that the bookings will follow each other and the first booking will be at the first day available
+     *
+     * Check if the given date are between the availability date of the room (both room availability dates are inclusives)
      * @param checkIn Date Check in
      * @param checkOut Date Check Out
      * @return
      */
     public boolean isAvailable(LocalDate checkIn, LocalDate checkOut){
         return (this.availableFrom.isEqual(checkIn) || this.availableFrom.isBefore(checkIn)) &&
-                (this.availableTo.isEqual(checkOut) || this.availableTo.isBefore(checkOut));
+                (this.availableTo.isEqual(checkOut) || this.availableTo.isAfter(checkOut));
     }
 }

@@ -7,12 +7,18 @@ import java.util.Optional;
 
 public interface ReservationRepository {
 
+    /**
+     * Get all the reservation for a room
+     *
+     * @param roomId room identification number
+     * @return List of reservations for the room
+     */
     List<Reservation> getAllReservationsByRoomId(Long roomId);
-    Reservation saveReservation(Reservation reservation);
 
-    Optional<Reservation> getOneById(Long id);
-
-    Optional <Reservation> getOnByReservationNumber(String reservationNumber);
-
+    /**
+     * Delete a reservation
+     *
+     * @param reservation the reservation
+     */
     void deleteOne(Reservation reservation);
 }

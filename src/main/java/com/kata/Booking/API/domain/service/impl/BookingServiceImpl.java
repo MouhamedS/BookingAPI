@@ -92,7 +92,7 @@ public class BookingServiceImpl  implements BookingService {
 
             if (existingReservation.isPresent()) {
 
-                boolean result =  room.cancelReservation(reservationNumber);
+                boolean result =  room.cancelReservation(existingReservation.get());
                 log.info("Room saved into DB {}", roomRespository.saveRoom(room));
                 reservationRepository.deleteOne(existingReservation.get());
                 log.info("ReservationMapper cancellation has been correctly perform : {}", result);
